@@ -14,7 +14,7 @@ import math
 #card_number = input("num: ")
 bg_color = "black"
 text_color = "white"
-colors = ["green", "yellow", "red", "blue"]
+colors = ["red", "blue", "green", "yellow"]
 card_number = "WILD"
 
 # constants
@@ -69,7 +69,7 @@ self.canvas.create_polygon(pts, fill="white") #create polygon from pts[]
 #loop to draw oval
 pts = [] #initialize array of points
 increment = math.pi*2/num #define delta i (angle) for each iteration of the loop
-i = -3*increment #initialize i for loop (angle)
+i = math.pi-3*increment #initialize i for loop (angle)
 j = -6 #initialize j for loop (index of array)
 
 pts = []
