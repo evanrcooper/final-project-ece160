@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
 
 #define DECK_SIZE 108
 #define NUM_PLAYERS 4
@@ -41,7 +42,11 @@ void swapCards(struct deck *deck, int index1, int index2);
 void shuffle(struct deck *deck);
 struct card draw(struct deck *deck);
 void deal(struct game *game);
+bool isValidCard(struct deck *deck, struct card *card);
 
+int inputInt(char text[]);
+int inputChar(char text[]);
+void inputString(char text[], char *str);
 
 int main() {
 	srand(time(0));
@@ -58,6 +63,25 @@ int main() {
 		game.players[i] = temp_player;
 	}
 	deal(&game);
+}
+
+int inputInt(char text[]) {
+	int temp;
+	printf("%s", text);
+	if (scanf("%d", &temp) == 1) {;}
+	return temp;
+}
+
+int inputChar(char text[]) {
+	char temp;
+	printf("%s", text);
+	if (scanf("%c", &temp) == 1) {;}
+	return temp;
+}
+
+void inputString(char text[], char *str) {
+	printf("%s", text);
+	if (scanf("%s", str) == 1) {;}
 }
 
 void createDeck(struct deck *deck) {
@@ -143,4 +167,16 @@ void deal(struct game *game) {
 			game->players[i].hand.cards[game->players[i].hand.hand_size++] = draw(&(game->main_deck));
 		}
 	}
+	game->main_deck.pile[game->main_deck.pile_size++] = draw(&(game->main_deck));
+}
+
+bool isValidCard(struct deck *deck, struct card *card) {
+	if (deck->pile[deck->pile_size-1].color == card->color) {
+		return true;
+	} else if (deck->pile[deck->pile_size-1].value == card->value) {
+		return true;
+	} else if (card->color == 5) {
+		return true;
+	}
+	return false;
 }
