@@ -4,4 +4,5 @@ Evan Rosenfeld, James Ryan
 Cooper Union, Fall 2022
 (Final Project for ECE-160)
 
--Thanks to Professor Smyth for his help
+Note:
+  --special thanks to Professor Smyth for his help
