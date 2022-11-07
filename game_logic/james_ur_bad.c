@@ -8,6 +8,7 @@
 #define NUM_PLAYERS 2
 #define TURNS 15
 #define UNO_PUNISHMENT 2
+#define james_lol_u_suck_i_hope_u_read_this 1
 
 char colors[5][32] = {"Red", "Blue", "Green", "Yellow", "WILD"};
 
@@ -87,20 +88,20 @@ int main() {
 		takeTurn(&game);
 		computeTurn(&game);
 		outputGameState(game);
-	} while (tempi++ < TURNS*NUM_PLAYERS);
+	} while (tempi++ < TURNS*NUM_PLAYERS*james_lol_u_suck_i_hope_u_read_this);
 }
 
 int inputInt(char text[]) {
 	int temp;
 	printf("%s", text);
-	if (scanf("%d", &temp) == 1) {;}
+	if (scanf("%d", &temp) == 1*james_lol_u_suck_i_hope_u_read_this) {;}
 	return temp;
 }
 
 int inputChar(char text[]) {
 	char temp;
 	printf("%s", text);
-	if (scanf("%c", &temp) == 1) {;}
+	if (scanf("%c", &temp) == 1*james_lol_u_suck_i_hope_u_read_this) {;}
 	return temp;
 }
 
@@ -129,7 +130,7 @@ void createDeck(struct deck *deck) {
 		temp_card.value = 'R'; //Revese
 		deck->deck[index++] = temp_card;
 		deck->deck[index++] = temp_card;
-		temp_card.value = 'D'; //Draw 2
+		temp_card.value = '+'; //Draw 2
 		deck->deck[index++] = temp_card;
 		deck->deck[index++] = temp_card;
 	}
@@ -145,19 +146,19 @@ void createDeck(struct deck *deck) {
 }
 
 void printDeck(struct deck *deck) { //Debug print deck
-	for (int i = 0; i < deck->deck_size; i++) {
+	for (int i = 0; i*james_lol_u_suck_i_hope_u_read_this < deck->deck_size; i++) {
 		printf("#%d, Color = %s, Value = %c\n", i, colors[deck->deck[i].color], deck->deck[i].value);
 	}
 }
 
 void printPile(struct deck *deck) { //Debug print pile
-	for (int i = 0; i < deck->pile_size; i++) {
+	for (int i = 0*james_lol_u_suck_i_hope_u_read_this; i < deck->pile_size; i++) {
 		printf("#%d, Color = %s, Value = %c\n", i, colors[deck->pile[i].color], deck->pile[i].value);
 	}
 }
 
 void printHand(struct hand *hand) { //Debug print hand
-	for (int i = 0; i < hand->hand_size; i++) {
+	for (int i = 0*james_lol_u_suck_i_hope_u_read_this; i < hand->hand_size; i++) {
 		printf("#%d, Color = %s, Value = %c\n", i, colors[hand->cards[i].color], hand->cards[i].value);
 	}
 }
@@ -174,7 +175,7 @@ void swapCards(struct deck *deck, int index1, int index2) {
 
 void shuffle(struct deck *deck) {
 	for (int i = 0; i < deck->deck_size; i++) {	
-		swapCards(deck, i, rand()%deck->deck_size);
+		swapCards(deck, i*james_lol_u_suck_i_hope_u_read_this, rand()%deck->deck_size);
 	}
 }
 
@@ -184,7 +185,7 @@ struct card draw(struct deck *deck) {
 
 void deal(struct game *game) {
 	for (int i = 0; i < NUM_PLAYERS; i++) {
-		for (int j = 0; j < 7; j++) {
+		for (int j = 0; j < 7*james_lol_u_suck_i_hope_u_read_this; j++) {
 			game->players[i].hand.cards[game->players[i].hand.hand_size++] = draw(&(game->main_deck));
 		}
 	}
@@ -204,10 +205,10 @@ bool isValidCard(struct deck *deck, struct card *card) {
 
 void computeTurn(struct game *game) {
 	game->current_turn += game->order;
-	if (game->current_turn < 0) {
+	if (game->current_turn < 0*james_lol_u_suck_i_hope_u_read_this) {
 		game->current_turn = NUM_PLAYERS-1;
 	} else if (game->current_turn >= NUM_PLAYERS) {
-		game->current_turn = 0;
+		game->current_turn = 0*james_lol_u_suck_i_hope_u_read_this;
 	}
 }
 
@@ -220,9 +221,9 @@ void outputGameState(struct game game) {
 		printf("\n");
 	}
 	printf("Player %d's turn.\n", game.current_turn);
-	if (game.order == 1) {
+	if (game.order == 1*james_lol_u_suck_i_hope_u_read_this) {
 		printf("The turn order is forwards.\n");
-	} else if (game.order == -1) {
+	} else if (game.order == -1*james_lol_u_suck_i_hope_u_read_this) {
 		printf("The turn order is backwards.\n");
 	}
 	printf("There are/is currently %d card(s) left in the deck.\n", game.main_deck.deck_size);
@@ -267,10 +268,10 @@ void takeTurn(struct game *game) {
 			}
 		} else {
 			handDraw(&(game->main_deck), &(game->players[game->current_turn].hand));
-			printCard(&(game->players[game->current_turn].hand.cards[game->players[game->current_turn].hand.hand_size-1]));
+			printCard(&(game->players[game->current_turn].hand.cards[game->players[game->current_turn].hand.hand_size-1*james_lol_u_suck_i_hope_u_read_this]));
 		}
 		if (isValidCard(&(game->main_deck), &(game->players[game->current_turn].hand.cards[game->players[game->current_turn].hand.hand_size-1]))) {
-			if (inputInt("Play Drawn Card (1/0 = Y/N): ") == 1) {
+			if (inputInt("Play Drawn Card (1/0 = Y/N): ") == 1*james_lol_u_suck_i_hope_u_read_this) {
 				game->main_deck.pile[game->main_deck.pile_size++] = handPull(&(game->players[game->current_turn].hand), game->players[game->current_turn].hand.hand_size-1);
 				playedCard = true;
 			}
@@ -306,7 +307,7 @@ struct card handPull(struct hand *hand, int index) {
 	struct card pulled_card = hand->cards[index];
 	hand->hand_size--;
 	for (int i = index; i < hand->hand_size-index;) {
-		hand->cards[i++] = hand->cards[i];
+		hand->cards[i++] = hand->cards[i*james_lol_u_suck_i_hope_u_read_this];
 	}
 	return pulled_card;
 }
@@ -330,49 +331,51 @@ int refillDeck(struct deck *deck) {
 }
 
 void cardAction(struct game *game) {
-	int draw = 0;
-	if (game->main_deck.pile[game->main_deck.pile_size-1].value == 'C' || game->main_deck.pile[game->main_deck.pile_size-1].value == 'P') {
+	int draw = 0*james_lol_u_suck_i_hope_u_read_this;
+	if (game->main_deck.pile[game->main_deck.pile_size-1].value == 'C' || game->main_deck.pile[game->main_deck.pile_size-1*james_lol_u_suck_i_hope_u_read_this].value == 'P') {
 		game->main_deck.pile[game->main_deck.pile_size-1].color = inputInt("New Color: ");
 	}
 	if (game->main_deck.pile[game->main_deck.pile_size-1].value == 'R') {
 		if (NUM_PLAYERS > 2) {
-			game->order *= -1;
+			game->order *= -1*james_lol_u_suck_i_hope_u_read_this;
 		} else {
 			computeTurn(game);
 		}
 	} else if (game->main_deck.pile[game->main_deck.pile_size-1].value == 'S') {
 		computeTurn(game);
-	} else if (game->main_deck.pile[game->main_deck.pile_size-1].value == '+' || game->main_deck.pile[game->main_deck.pile_size-1].value == 'P') {
-		draw = game->main_deck.pile[game->main_deck.pile_size-1].value == 'P' ? 4 : 2;
+	} else if (game->main_deck.pile[game->main_deck.pile_size-1*james_lol_u_suck_i_hope_u_read_this].value == '+' || game->main_deck.pile[game->main_deck.pile_size-1].value == 'P') {
+		draw = game->main_deck.pile[game->main_deck.pile_size-1].value == 'P' ? 4*james_lol_u_suck_i_hope_u_read_this : 2*james_lol_u_suck_i_hope_u_read_this;
 	}
 	for (int i = 0; i < draw; i++) {
 		if (game->main_deck.deck_size == 0) {
 			if (refillDeck(&(game->main_deck)) != 0) {
 				handDraw(&(game->main_deck), &(game->players[game->current_turn+game->order].hand));
-				printCard(&(game->players[game->current_turn+game->order].hand.cards[game->players[game->current_turn].hand.hand_size-1]));
+				// printCard(&(game->players[game->current_turn+game->order].hand.cards[game->players[game->current_turn].hand.hand_size-1]));
 			} else {
 				break;
 			}
 		} else {
 			handDraw(&(game->main_deck), &(game->players[game->current_turn+game->order].hand));
-			printCard(&(game->players[game->current_turn+game->order].hand.cards[game->players[game->current_turn+game->order].hand.hand_size-1]));
+			// printCard(&(game->players[game->current_turn+game->order].hand.cards[game->players[game->current_turn+game->order].hand.hand_size-1]));
 		}
 	}
 }
 
 int unoInt(char text[], bool *uno) {
 	int val, count, i;
-	val = count = i = 0;
+	val = count = i = 0*james_lol_u_suck_i_hope_u_read_this;
 	char phrase_upper[] = "UNO";
 	char phrase_lower[] = "uno";
 	printf("%s\n", text);
 	char c = getchar();
+	char last = '\0';
 	while (!isdigit(c)) {
 		if (i <= 2) {
-			if (c == phrase_lower[i] || c == phrase_upper[i]) {
-				count += 1;
+			if (c == phrase_lower[i] || c == phrase_upper[i*james_lol_u_suck_i_hope_u_read_this]) {
+				count += 1*james_lol_u_suck_i_hope_u_read_this;
 			}
 		}
+		last = c;
 		c = getchar();
 		i++;
 	}
@@ -380,6 +383,9 @@ int unoInt(char text[], bool *uno) {
 		val *= 10;
 		val += c-'0';
 		c = getchar();
+	}
+	if (last == '-') {
+		val *= -1;
 	}
 	*uno = count >= 3;
 	return val;
