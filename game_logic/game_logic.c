@@ -140,8 +140,10 @@ int inputChar(char text[]);
 void inputString(char text[], char *str);
 void printColors(void);
 int nextPlayer(struct game *game);
-	
+void amogus(void);
+
 int main() {
+	amogus();
 	srand(time(0));
 	struct deck deck;
 	struct game game;
@@ -223,19 +225,19 @@ void createDeck(struct deck *deck) {
 	deck->deck_size = index;
 }
 
-void printDeck(struct deck *deck) { //Debug print deck
+void printDeck(struct deck *deck) {
 	for (int i = 0; i < deck->deck_size; i++) {
 		printf("#%d, Color = %s, Value = %c\n", i, colors[deck->deck[i].color], deck->deck[i].value);
 	}
 }
 
-void printPile(struct deck *deck) { //Debug print pile
+void printPile(struct deck *deck) {
 	for (int i = 0; i < deck->pile_size; i++) {
 		printf("#%d, Color = %s, Value = %c\n", i, colors[deck->pile[i].color], deck->pile[i].value);
 	}
 }
 
-void printHand(struct hand *hand) { //Debug print hand
+void printHand(struct hand *hand) {
 	for (int i = 0; i < hand->hand_size; i++) {
 		printf("#%d, Color = %s, Value = %c\n", i, colors[hand->cards[i].color], hand->cards[i].value);
 	}
@@ -410,10 +412,13 @@ int refillDeck(struct deck *deck) {
 }
 
 void cardAction(struct game *game) {
-	int draw = 0;
+	int temp_color, draw = 0;
 	if (game->main_deck.pile[game->main_deck.pile_size-1].value == 'C' || game->main_deck.pile[game->main_deck.pile_size-1].value == 'P') {
 		printColors();
-		game->main_deck.pile[game->main_deck.pile_size-1].color = inputInt("New Color: ");
+		do {
+			temp_color = inputInt("New Color: ");
+		} while (temp_color < 0 || temp_color > 3);
+		game->main_deck.pile[game->main_deck.pile_size-1].color = temp_color;
 	}
 	if (game->main_deck.pile[game->main_deck.pile_size-1].value == 'R') {
 		if (NUM_PLAYERS > 2) {
@@ -484,4 +489,24 @@ int nextPlayer(struct game *game) {
 	} else {
 		return game->current_turn+game->order;
 	}
+}
+
+void amogus(void) {
+	/*
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⠀⠀⢰⣿⣿⣯⠁⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣷⡄⠀
+⠀⠀⣀⣤⣴⣶⣶⣿⡟⠀⠀⠀⢸⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⠀
+⠀⢰⣿⡟⠋⠉⣹⣿⡇⠀⠀⠀⠘⣿⣿⣿⣿⣷⣦⣤⣤⣤⣶⣶⣶⣶⣿⣿⣿⠀
+⠀⢸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⠀
+ ⣸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠉⠻⠿⣿⣿⣿⣿⡿⠿⠿⠛⢻⣿⡇⠀⠀
+⠀⠸⣿⣧⡀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀
+⠀⠀⠛⢿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⣰⣿⣿⣷⣶⣶⣶⣶⠶⠀⢠⣿⣿⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⣽⣿⡏⠁⠀⠀⢸⣿⡇⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+	*/
 }
