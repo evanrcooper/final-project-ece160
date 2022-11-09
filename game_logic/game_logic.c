@@ -61,7 +61,9 @@ int unoInt(char text[], bool *uno);
 int inputInt(char text[]);
 int inputChar(char text[]);
 void inputString(char text[], char *str);
-
+void printColors(void);
+int nextPlayer(struct game *game);
+	
 int main() {
 	srand(time(0));
 	struct deck deck;
@@ -82,7 +84,7 @@ int main() {
 	deal(&game);
 	int tempi = 0;
 	outputGameState(game);
-	game.main_deck.deck_size = 1;
+	
 	do {
 		takeTurn(&game);
 		computeTurn(&game);
@@ -179,7 +181,8 @@ void shuffle(struct deck *deck) {
 }
 
 struct card draw(struct deck *deck) {
-	return deck->deck[--deck->deck_size];
+	deck->deck_size -= 1;
+	return deck->deck[deck->deck_size];
 }
 
 void deal(struct game *game) {
@@ -240,7 +243,8 @@ void takeTurn(struct game *game) {
 	bool hasValidCard = false;
 	do {
 		index = unoInt("Card Index: ", &UNO);
-		if (index < 0) {
+		// index = inputInt("Card Index: ");
+		if (index < 0 && !draw) {
 			for (int i = 0; i < game->players[game->current_turn].hand.hand_size; i++) {
 				if (isValidCard(&(game->main_deck), &(game->players[game->current_turn].hand.cards[i]))) {
 					hasValidCard = true;
@@ -305,8 +309,8 @@ void takeTurn(struct game *game) {
 struct card handPull(struct hand *hand, int index) {
 	struct card pulled_card = hand->cards[index];
 	hand->hand_size--;
-	for (int i = index; i < hand->hand_size-index;) {
-		hand->cards[i++] = hand->cards[i];
+	for (int i = 0; i < hand->hand_size-index; i++) {
+		hand->cards[i+index] = hand->cards[i+index+1];
 	}
 	return pulled_card;
 }
@@ -332,6 +336,7 @@ int refillDeck(struct deck *deck) {
 void cardAction(struct game *game) {
 	int draw = 0;
 	if (game->main_deck.pile[game->main_deck.pile_size-1].value == 'C' || game->main_deck.pile[game->main_deck.pile_size-1].value == 'P') {
+		printColors();
 		game->main_deck.pile[game->main_deck.pile_size-1].color = inputInt("New Color: ");
 	}
 	if (game->main_deck.pile[game->main_deck.pile_size-1].value == 'R') {
@@ -346,14 +351,15 @@ void cardAction(struct game *game) {
 		draw = game->main_deck.pile[game->main_deck.pile_size-1].value == 'P' ? 4 : 2;
 	}
 	for (int i = 0; i < draw; i++) {
+		printf("\n\n\n\nBALLS\n\n\n");
 		if (game->main_deck.deck_size == 0) {
 			if (refillDeck(&(game->main_deck)) != 0) {
-				handDraw(&(game->main_deck), &(game->players[game->current_turn+game->order].hand));
+				handDraw(&(game->main_deck), &(game->players[nextPlayer(game)].hand));
 			} else {
 				break;
 			}
 		} else {
-			handDraw(&(game->main_deck), &(game->players[game->current_turn+game->order].hand));
+			handDraw(&(game->main_deck), &(game->players[nextPlayer(game)].hand));
 		}
 	}
 }
@@ -386,4 +392,20 @@ int unoInt(char text[], bool *uno) {
 	}
 	*uno = count >= 3;
 	return val;
+}
+
+void printColors(void) {
+	for (int i = 0; i < 4; i++) {
+		printf("%d = %s, ", i, colors[i]);
+	}
+	printf("\n");
+}
+
+int nextPlayer(struct game *game) {
+	computeTurn(game);
+	int next = game->current_turn;
+	game->order *= -1;
+	computeTurn(game);
+	game->order *= -1;
+	return next;
 }
