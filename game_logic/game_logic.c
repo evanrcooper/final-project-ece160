@@ -162,8 +162,7 @@ int main() {
 	}
 	deal(&game);
 	int tempi = 0;
-	outputGameState(game);
-	
+	outputGameState(game);	
 	do {
 		takeTurn(&game);
 		computeTurn(&game);
@@ -403,7 +402,7 @@ int refillDeck(struct deck *deck) {
 		if (deck->pile[i].value == 'C' || deck->pile[i].value == 'P') {
 			deck->pile[i].color = 4;
 		}
-		deck->deck[deck->deck_size+i] = deck->pile[i];
+		deck->deck[deck->deck_size++] = deck->pile[i];
 	}
 	deck->pile[0] = deck->pile[deck->pile_size-1];
 	deck->pile_size = 1;
