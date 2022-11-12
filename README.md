@@ -1,11 +1,15 @@
 # final-project-ece160
-UNO! over TCP/UDP with GUI  
+UNO! over TCP with GUI  
 Evan Rosenfeld, James Ryan  
-Cooper Union, Fall 2022
-(Final Project for ECE-160)
+Cooper Union, Fall 2022  
+(Final Project for ECE-160)  
+  
+Depenencies:  
+<pre>
+msgpack, install with -- pip install msgpack
+</pre>
+  
+How to run:  
+idk  
 
-THIS CODE IS BAREBONES AND (AS OF NOW) IS FOR TESTING PURPOSING ONLY
-
-
-Note:
-  --special thanks to Professor Smyth for his help
+Special thanks to Professor Smyth for his help with creating a nice-looking GUI  
