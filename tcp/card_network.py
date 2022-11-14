@@ -45,7 +45,7 @@ print(x.c.decode())
     
 print("--------")
 print(x.t)
-color = x.c
+color = x.c.decode()
 card_number = x.t
 #the gamer move -- stop working
 #exit()
