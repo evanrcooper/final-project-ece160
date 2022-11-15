@@ -1,0 +1,6 @@
+syntax = "proto2";
+
+message card{
+	required string color = 1;
+	required int32 number = 2;
+}
