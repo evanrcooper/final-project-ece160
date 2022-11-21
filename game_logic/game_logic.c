@@ -122,6 +122,7 @@ void printDeck(struct deck *deck);
 void printPile(struct deck *deck);
 void printHand(struct hand *hand);
 void printCard(struct card *card);
+void printPlayer(struct game *game, int index);
 void swapCards(struct deck *deck, int index1, int index2);
 void shuffle(struct deck *deck);
 struct card draw(struct deck *deck);
@@ -244,6 +245,15 @@ void printHand(struct hand *hand) {
 
 void printCard(struct card *card) {
 	printf("Color = %s, Value = %c\n", colors[card->color], card->value);
+}
+
+void printPlayer(struct game *game, int index) {
+	if (index >= NUM_PLAYERS || index < 0) {
+		printf("Error: Index Out Of Bounds\n");
+		return;
+	}
+	printf("Player %d's Hand:\n", index);
+	printHand(&(game->players[index].hand));
 }
 
 void swapCards(struct deck *deck, int index1, int index2) {
