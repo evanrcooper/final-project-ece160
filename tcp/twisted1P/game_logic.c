@@ -96,9 +96,14 @@
 #define READINBUFFER 10000
 
 char py_readin[READINBUFFER];
+unsigned int py_readinSIZE = 0;
 char c_readin[READINBUFFER];
+unsigned int c_readinSIZE = 0;
 
 char colors[5][32] = {"Red", "Blue", "Green", "Yellow", "WILD"};
+
+unsigned int c_readinChecksum = 0;
+unsigned int py_readinChecksum = 0;
 
 struct card {
 	int color;
@@ -159,8 +164,14 @@ void writeToPyReadin(char text[]);
 void readFromCReadin(void);
 void clearBuffer(char buf[]);
 
+//Waits for an update
+void waitForResponse(void);
+//checksums a file and sees if it changes
+int changeIn(FILE* file);
+
 void setupCReadin(void); //RUN THIS AT START ONLY!!!!!!
 //This function sets up the file for c readin and tells python "i'm alive!"
+//Also sets up initial checksum
 
 void writeToPyReadin(char text[]){
 	FILE* py_in; //Note the distinction: PY_READIN is a path! py_readin points to the file 
@@ -182,10 +193,9 @@ void readFromCReadin(){
 	c_in = fopen(C_READIN, "r");
 
 	if(c_in == NULL){
-		printf("readFromCReadin: c_readin cannot be opened.\n");
+		printf("readFromCReadin: c_readin cannot be opened. My bowels will now evacuate onto the kitchen floor.\n");
 	}
 
-	//implement getch and ungetch
 	int i = 0;
 	do{
 		c = fgetc(c_in);
@@ -193,10 +203,33 @@ void readFromCReadin(){
 		i++;
 		printf("%d", i);
 	} while(c != EOF);
-	c_readin[i] = '\0';
+	
 	printf("%s", c_readin);
 	fclose(c_in);
+	
 	return; 
+}
+
+//https://stackoverflow.com/a/3464166
+//REMEMBER TO CLOSE THE FILE!!!!!
+int changeIn(FILE* file){
+	unsigned char cs = 0;
+	while (!feof(file) && !ferror(file)) {
+		   cs ^= fgetc(file);
+	}
+
+	return cs;
+}
+
+//Stick in one of the global buffers and its respective length
+//It will become empty
+void clearBuffer(char buf[], unsigned int *length){
+	while(length>0){
+		buf[length-1] = 0;
+		length--;
+	}
+
+	return;
 }
 
 int main() {

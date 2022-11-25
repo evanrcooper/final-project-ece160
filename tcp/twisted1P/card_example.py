@@ -1,5 +1,3 @@
-!/usr/bin/python3
-
 ########
 # UNO! #
 ########
@@ -11,50 +9,9 @@ import tkinter as tk
 from tkinter import *
 import math
 
-import socket
-import time
-
-import struct
-import ctypes as ct
-
-import msgpack
-
-class Card(ct.Structure):
-    fields = {
-        ("c", str),
-        ("t", ct.c_int),
-    }
-
-host = 'localhost'
-port = 12345
-
-print("Attempting to find valid UNO game...")
-while True:
-    try:
-        s = socket.create_connection(('localhost', 12345))
-    except:
-        time.sleep(3)
-    else:
-        print("Connection Established!")
-        break
-    
-data = s.recv(1024)
-
-x = Card()
-x.c, x.t = msgpack.unpackb(data, raw=False)
-
-print(x.c)
-    
-print("--------")
-print(x.t)
-color = x.c
-card_number = x.t
-#the gamer move -- stop working
-#exit()
-
 #temporary variables for color and number on card
-#color = input("color: ")
-#card_number = input("num: ")
+color = input("color: ")
+card_number = input("num: ")
 
 # constants
 h = 450 #window hieght
@@ -194,3 +151,4 @@ self.canvas.pack()
 #start loop
 self.mainloop()
 
+#####################################################################################

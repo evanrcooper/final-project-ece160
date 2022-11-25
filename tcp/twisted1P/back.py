@@ -1,5 +1,3 @@
-!/usr/bin/python3
-
 ########
 # UNO! #
 ########
@@ -11,50 +9,9 @@ import tkinter as tk
 from tkinter import *
 import math
 
-import socket
-import time
-
-import struct
-import ctypes as ct
-
-import msgpack
-
-class Card(ct.Structure):
-    fields = {
-        ("c", str),
-        ("t", ct.c_int),
-    }
-
-host = 'localhost'
-port = 12345
-
-print("Attempting to find valid UNO game...")
-while True:
-    try:
-        s = socket.create_connection(('localhost', 12345))
-    except:
-        time.sleep(3)
-    else:
-        print("Connection Established!")
-        break
-    
-data = s.recv(1024)
-
-x = Card()
-x.c, x.t = msgpack.unpackb(data, raw=False)
-
-print(x.c)
-    
-print("--------")
-print(x.t)
-color = x.c
-card_number = x.t
-#the gamer move -- stop working
-#exit()
-
 #temporary variables for color and number on card
-#color = input("color: ")
-#card_number = input("num: ")
+color = "red"
+card_number = "UNO"
 
 # constants
 h = 450 #window hieght
@@ -62,6 +19,11 @@ w = 300 #window width
 mw = 16 #margin (width)
 mh = 16 #margin (height)
 mt = 4 #margin (text, width)
+ta = 15 #text angle (center)
+tc = "yellow" #text color
+mtb = 10 #text shadow width
+tmw = 10 #text margin width
+tmh = 0 #text margin height
 
 #initialize window (as self)
 self = tk.Tk()
@@ -75,7 +37,7 @@ self.resizable(False, False) #make window not resizable
 #draw oval
 
 #initialize canvas (as self.canvas)
-self.canvas = Canvas(width=w, height=h, bg=color)
+self.canvas = Canvas(width=w, height=h, bg="black")
 
 #constants
 pts = [] #initialize array of points
@@ -93,7 +55,7 @@ while j < 2*num:
 	pts.append((math.sin(th))*(r1*math.cos(i)) + (math.cos(th))*(r2*math.sin(i)) + h/2) #y
 	i += increment #increment i
 	j += 2 #increment j
-self.canvas.create_polygon(pts, fill="white") #create polygon from pts[]
+self.canvas.create_polygon(pts, fill=color) #create polygon from pts[]
 
 ######################################################################################################
 
@@ -183,14 +145,15 @@ self.canvas.create_polygon(w,h,w,0,w-mw,0,w-mw,h, fill="white")
 self.canvas.create_polygon(w,h,0,h,0,h-mh,w,h-mh, fill="white")
 
 #draw text
-self.canvas.create_text(w/2+mt, h/2+mt, text=card_number, fill="black", font=('Helvetica 55 bold')) #center shadow
-self.canvas.create_text(w/2, h/2, text=card_number, fill=color, font=('Helvetica 55 bold')) #center
-self.canvas.create_text(mw+r3, mh+r3+mt, text=card_number, fill="white", font=('Helvetica 20 bold')) #top left
-self.canvas.create_text(w-mw-r3, h-mh-r3, text=card_number, fill="white", font=('Helvetica 20 bold')) #bottom right
+for b in range(mtb+1):
+	self.canvas.create_text(w/2-b+tmw, h/2+b+tmh, text=card_number, fill="black", font=('Helvetica 55 bold'), angle=ta) #center shadow
+self.canvas.create_text(w/2+tmw, h/2+tmh, text=card_number, fill=tc, font=('Helvetica 55 bold'), angle=ta) #center
 
 #pack canvas
 self.canvas.pack()
 
 #start loop
 self.mainloop()
+
+#####################################################################################
 
