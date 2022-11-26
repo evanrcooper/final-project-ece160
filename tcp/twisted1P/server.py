@@ -106,7 +106,7 @@ class UnoPlayers(LineReceiver):
         #print whose in the lobby
         #continually update
 
-class doNothing(UnoPlayers):
+class doNothing(object):
     pass
 
 class unoFactory(Factory):
@@ -146,6 +146,6 @@ maxConnections = 2
 
 #Now that the C and Pyth have a pipe, we can start accepting internet connections.
 reactor.listenTCP(portForClients, unoFactory(maxConnections))
-printToLog(f"Server started on host {host} port {port}")
+printToLog(f"Server started on host {host} port {portForClients}")
 printToLog(f"Today we will allow {maxConnections} people to play UNO. Waiting for all to join...")
 reactor.run()
