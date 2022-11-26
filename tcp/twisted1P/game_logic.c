@@ -162,7 +162,7 @@ void amogus(void);
 
 void writeToPyReadin(char text[]);
 void readFromCReadin(void);
-void clearBuffer(char buf[]);
+void clearBuffer(char buf[], unsigned int* length);
 
 //Waits for an update
 void waitForResponse(void);
@@ -173,7 +173,7 @@ void setupCReadin(void); //RUN THIS AT START ONLY!!!!!!
 //This function sets up the file for c readin and tells python "i'm alive!"
 //Also sets up initial checksum
 
-void writeToPyReadin(char text[]){
+void writeToPyReadin(char* text){
 	FILE* py_in; //Note the distinction: PY_READIN is a path! py_readin points to the file 
 	char c;
 
@@ -183,7 +183,16 @@ void writeToPyReadin(char text[]){
 		printf("writeToPyReadin: py_readin cannot be opened/created.\n");
 	}
 	
+	int i = 0;
+	do{
+		c = text[i];
+		fputc(c, py_in);
+		printf("%c", c);
+		i++;
+	} while(i != strlen(text));
 
+	fclose(py_in);
+	return;
 }
 
 void readFromCReadin(){
@@ -193,7 +202,7 @@ void readFromCReadin(){
 	c_in = fopen(C_READIN, "r");
 
 	if(c_in == NULL){
-		printf("readFromCReadin: c_readin cannot be opened. My bowels will now evacuate onto the kitchen floor.\n");
+		printf("readFromCReadin: c_readin cannot be opened. My bowels will now evacuate onto the kitchen floor.\nIn the directory you are running this binary from, please create an empty file called 'c_readin' which can be written to and read from.\n");
 	}
 
 	int i = 0;
@@ -224,9 +233,9 @@ int changeIn(FILE* file){
 //Stick in one of the global buffers and its respective length
 //It will become empty
 void clearBuffer(char buf[], unsigned int *length){
-	while(length>0){
-		buf[length-1] = 0;
-		length--;
+	while(*length>0){
+		buf[*length-1] = 0;
+		*length--;
 	}
 
 	return;
