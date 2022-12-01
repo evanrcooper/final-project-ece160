@@ -107,8 +107,8 @@ class UnoPlayers(LineReceiver):
             self.sendLine(b"Invalid name, try again.")
             return
         self.state = "AWAITING_START"
-        self.sendLine(b"Thanks. Waiting for everyone to be ready....")
-        self.sendLine(b"^C to quit.")
+        self.sendLine(b"Thanks. Hang tight while everyone joins.")
+        self.sendLine(b"^C to quit. You cannot abandon when the game starts.")
 
         printToLog(f"{self.name} is ready!")
 
@@ -118,9 +118,8 @@ class UnoPlayers(LineReceiver):
         
         if len(self.players) == self.maxConnections:
             for plyr, protocol in self.players.items():
-                protocol.sendLine(b"Game start!")
-                printToLog(f"sent notice to {protocol.name}")
                 protocol.state = "BEGIN"
+                printToLog(f"sent notice to {protocol.name}")
 
             #Waits for player to accept their fate
             printToLog(f"Game starts with {self.name}")
@@ -153,12 +152,13 @@ class UnoPlayers(LineReceiver):
             printToLog("SURESIG Received... gaem is a go")
             self.state = "BEGIN" #TEMP!!!!!!!!!
             return
-        printToLog("FUCK!", "\n", "SHIT")
+        printToLog("Received the wrong information. IMPLEMENT REDO", "\n", "Failure")
         return
 
     def handle_BEGIN(self, line):
-        printToLog("WE BEGIN NOW!!!")
-        self.sendLine(b"Now we begin.")
+        printToLog("All players are ready to play")
+        for plyr, protocol in self.players.items():
+            protocol.sendLine(b"All players have arrived. Now we begin.")
         return
 
 class doNothing(Protocol):
