@@ -1,5 +1,3 @@
-!/usr/bin/python3
-
 ########
 # UNO! #
 ########
@@ -11,50 +9,11 @@ import tkinter as tk
 from tkinter import *
 import math
 
-import socket
-import time
-
-import struct
-import ctypes as ct
-
-import msgpack
-
-class Card(ct.Structure):
-    fields = {
-        ("c", str),
-        ("t", ct.c_int),
-    }
-
-host = 'localhost'
-port = 12345
-
-print("Attempting to find valid UNO game...")
-while True:
-    try:
-        s = socket.create_connection(('localhost', 12345))
-    except:
-        time.sleep(3)
-    else:
-        print("Connection Established!")
-        break
-    
-data = s.recv(1024)
-
-x = Card()
-x.c, x.t = msgpack.unpackb(data, raw=False)
-
-print(x.c)
-    
-print("--------")
-print(x.t)
-color = x.c
-card_number = x.t
-#the gamer move -- stop working
-#exit()
-
 #temporary variables for color and number on card
-#color = input("color: ")
-#card_number = input("num: ")
+# color = input("color: ")
+# card_number = input("num: ")
+color = "red"
+card_number = "\u21B5"
 
 # constants
 h = 450 #window hieght
@@ -62,6 +21,12 @@ w = 300 #window width
 mw = 16 #margin (width)
 mh = 16 #margin (height)
 mt = 4 #margin (text, width)
+ta = 45 #center text rotation angle
+mth = 32 #margin text width
+mtw = 0 #margin text height
+mth2 = 11
+mtw2 = 1
+mtb = 10
 
 #initialize window (as self)
 self = tk.Tk()
@@ -183,14 +148,21 @@ self.canvas.create_polygon(w,h,w,0,w-mw,0,w-mw,h, fill="white")
 self.canvas.create_polygon(w,h,0,h,0,h-mh,w,h-mh, fill="white")
 
 #draw text
-self.canvas.create_text(w/2+mt, h/2+mt, text=card_number, fill="black", font=('Helvetica 55 bold')) #center shadow
-self.canvas.create_text(w/2, h/2, text=card_number, fill=color, font=('Helvetica 55 bold')) #center
-self.canvas.create_text(mw+r3, mh+r3+mt, text=card_number, fill="white", font=('Helvetica 20 bold')) #top left
-self.canvas.create_text(w-mw-r3, h-mh-r3, text=card_number, fill="white", font=('Helvetica 20 bold')) #bottom right
+for b in range(mtb+1): #shadow
+	self.canvas.create_text((w/2)-mtw-b, (h/2)+mth+b, text=card_number, fill="black", font=('Helvetica 60 bold'), angle=ta)
+	self.canvas.create_text((w/2)+mtw-b, (h/2)-mth+b, text=card_number, fill="black", font=('Helvetica 60 bold'), angle=180+ta)
+self.canvas.create_text((w/2)-mtw, (h/2)+mth, text=card_number, fill=color, font=('Helvetica 60 bold'), angle=ta) #center
+self.canvas.create_text((w/2)+mtw, (h/2)-mth, text=card_number, fill=color, font=('Helvetica 60 bold'), angle=180+ta) #center
+self.canvas.create_text(mw+r3-mtw2, mh+r3+mt+mth2, text=card_number, fill="white", font=('Helvetica 20 bold'), angle=ta) #top left
+self.canvas.create_text(mw+r3+mtw2, mh+r3+mt-mth2, text=card_number, fill="white", font=('Helvetica 20 bold'), angle=180+ta) #top left
+self.canvas.create_text(w-mw-r3-mtw2, h-mh-r3+mth2, text=card_number, fill="white", font=('Helvetica 20 bold'), angle=ta) #bottom right
+self.canvas.create_text(w-mw-r3+mtw2, h-mh-r3-mth2, text=card_number, fill="white", font=('Helvetica 20 bold'), angle=180+ta) #bottom right
 
 #pack canvas
 self.canvas.pack()
 
 #start loop
 self.mainloop()
+
+#####################################################################################
 

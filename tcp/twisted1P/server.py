@@ -41,6 +41,7 @@ from twisted.internet import reactor
 from twisted.internet.protocol import Factory
 from twisted.protocols.basic import LineReceiver
 
+import os
 
 ##TODO
 #add comments to describe whats happening
@@ -105,7 +106,7 @@ class UnoPlayers(LineReceiver):
         #print whose in the lobby
         #continually update
 
-class doNothing(UnoPlayers):
+class doNothing(object):
     pass
 
 class unoFactory(Factory):
@@ -138,11 +139,13 @@ def printToLog(s: str, end = "\n", st = "LOG"):
 #build mainloop later
 #build exception handler later if the tcp connection fails to form
 host = 'localhost'
-port = 8123
+portForLocalC = 8246
+portForClients = 8123
 
-maxConnections = 1 
+maxConnections = 2 
 
-reactor.listenTCP(port, unoFactory(maxConnections))
-printToLog(f"Server started on host {host} port {port}")
+#Now that the C and Pyth have a pipe, we can start accepting internet connections.
+reactor.listenTCP(portForClients, unoFactory(maxConnections))
+printToLog(f"Server started on host {host} port {portForClients}")
 printToLog(f"Today we will allow {maxConnections} people to play UNO. Waiting for all to join...")
 reactor.run()
