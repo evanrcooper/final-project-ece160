@@ -13,20 +13,22 @@ valid_cards = ('0','1','2','3','4','5','6','7','8','9','+','P','C','R','S','B')
 
 
 
-color = input("color: ")
 number = None
 while not number in valid_cards:
 	number = input("number: ").upper()
 
 if number in str({*range(10)}) or number == '+':
+	color = input("color: ")
 	drawCard(color, number)
 elif number == 'P':
 	plus4()
 elif number == 'C':
 	wild()
 elif number == 'R':
+	color = input("color: ")
 	reverse(color)
 elif number == 'S':
+	color = input("color: ")
 	skip(color)
 elif number == 'B':
 	back()
