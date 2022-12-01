@@ -11,4 +11,8 @@ what do they read? messagepack data, encoded to be whatever they need.
 How do they know when they're listening?
 3 way handshake
 c writes 1 to py_readin, py writes 1 to c_readin, c writes 0 to py_readin
+
+Credits:
+https://github.com/ludocode/mpack
+https://twisted.org/
 </pre>

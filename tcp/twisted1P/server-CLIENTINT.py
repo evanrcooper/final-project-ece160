@@ -38,15 +38,10 @@ Facilitates gameplay flow between C and Python.
 
 
 from twisted.internet import reactor
-from twisted.internet.protocol import Factory, Protocol
+from twisted.internet.protocol import Factory
 from twisted.protocols.basic import LineReceiver
 
 import os
-import time
-
-WAITSIG = b"__WAIT__"
-QUERSIG = b"__QUERY__"
-SURESIG = b"__SURE__"
 
 ##TODO
 #add comments to describe whats happening
@@ -75,12 +70,8 @@ class UnoPlayers(LineReceiver):
         printToLog(self.players)
 
     def lineReceived(self, line): #change to switch case later
-        if self.state == "AWAITING_CONF":
-            self.handle_AWAITING_CONF(line)
         if self.state == "GETNAME":
             self.handle_GETNAME(line)
-        elif self.state == "BEGIN":
-            self.handle_BEGIN(line)
         else:
             self.handle_AWAITING_START(line)
 
@@ -102,14 +93,10 @@ class UnoPlayers(LineReceiver):
 
     def handle_GETNAME(self, name):
         self.name = name.decode()
-        self.name = self.name.strip()
-        if self.name == "":
-            self.sendLine(b"Invalid name, try again.")
-            return
         self.state = "AWAITING_START"
         self.sendLine(b"Thanks. Waiting for everyone to be ready....")
-        self.sendLine(b"^C to quit.")
 
+        self.sendLine(b"Options: r to change alias, q to quit.")
         printToLog(f"{self.name} is ready!")
 
         #iter through players here
@@ -118,50 +105,25 @@ class UnoPlayers(LineReceiver):
         
         if len(self.players) == self.maxConnections:
             for plyr, protocol in self.players.items():
-                protocol.sendLine(b"Game start!")
-                printToLog(f"sent notice to {protocol.name}")
                 protocol.state = "BEGIN"
-
-            #Waits for player to accept their fate
-            printToLog(f"Game starts with {self.name}")
-            self.sendLine(QUERSIG)
-            self.state = "AWAITING_CONF"
-
+        
         #prints the status of every player connected & registered
         printToLog(f"List of plyrs: ")
         for plyr, protocol in self.players.items(): #Players is a list of TUPLES. name in bytes, protocol is where the meat dwells.
             printToLog(f"{protocol.name} {protocol.addr} | STATUS: {protocol.state}", '\n', f"PLAYER{list(self.players.keys()).index(protocol.addr)}")
+        return
         printToLog(f"End List")
-        return 
 
     def handle_AWAITING_START(self, line):
-        """
         if line.decode() == "r":
             self.state = "GETNAME"
-            self.sendLine(b"New alias?")
+            self.sendLine(b"\nNew alias?")
             printToLog(f"Heads up. {self.name} is changing their alias.")
-        else:
-            self.sendLine(b"Invalid Input.")
         return
-        """
         #print whose in the lobby
         #continually update
 
-    def handle_AWAITING_CONF(self, line):
-        printToLog(line)
-        if SURESIG.decode() in line.decode():
-            printToLog("SURESIG Received... gaem is a go")
-            self.state = "BEGIN" #TEMP!!!!!!!!!
-            return
-        printToLog("FUCK!", "\n", "SHIT")
-        return
-
-    def handle_BEGIN(self, line):
-        printToLog("WE BEGIN NOW!!!")
-        self.sendLine(b"Now we begin.")
-        return
-
-class doNothing(Protocol):
+class doNothing(object):
     pass
 
 class unoFactory(Factory):
@@ -179,13 +141,6 @@ class unoFactory(Factory):
             protocol = doNothing()
             protocol.factory = self
             return protocol
-    #FIX ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    def oneConnectionDisconnected(self):
-        self.currentCons -= 1
-        if self.currentCons > 0 and not (self.players[0].state == "GETNAME" or self.players[0].state == "AWAITING_START"):
-            for plyr, protocol in self.players.items():
-                protocol.sendLine("Player Disconnected! Game will now end.")
-                reactor.stop()
 
 def printToLog(s: str, end = "\n", st = "LOG"):
     #set up string to write, file to write to (latest_log)
