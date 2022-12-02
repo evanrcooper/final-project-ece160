@@ -47,29 +47,4 @@ def draw(number, color = None):
 	elif number.upper() == 'B':
 		back()
 
-<<<<<<< HEAD
 draw(input("Number: "), input("Color: "))
-=======
-
-
-number = None
-while not number in valid_cards:
-	number = input("number: ").upper()
-
-if number in str({*range(10)}) or number == '+':
-	color = input("color: ")
-	drawCard(color, number)
-#color isnt important for some cards!
-elif number == 'P':
-	plus4()
-elif number == 'C':
-	wild()
-elif number == 'R':
-	color = input("color: ")
-	reverse(color)
-elif number == 'S':
-	color = input("color: ")
-	skip(color)
-elif number == 'B':
-	back()
->>>>>>> d540d72 (added comments and attributions)
