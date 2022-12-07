@@ -43,7 +43,11 @@ class Card:
 	def __str__(self):
 		print(colors[self.color], values[self.value])
 		return ""
-
+	def hasAttribute(self):
+		if self.isNum():
+			return False
+		else:
+			return True
 # main deck class
 class MainDeck:
 	#init with empty pile (face up) to play to and deck (face down) to darw from
@@ -67,7 +71,11 @@ class MainDeck:
 		if len(self.deck) > 0:
 			return self.deck.pop()
 		else:
-			return None
+			self.refillDeck()
+			if len(self.deck) > 0:
+				return self.deck.pop()
+			else:
+				return None
 	# refills deck with cards in the pile (leaves one card as top crad)
 	def refillDeck(self):
 		temp = self.pile.pop()
@@ -98,11 +106,10 @@ class Player:
 	def __str__(self):
 		print(self.name, "has", str(len(self.hand)), "cards.")
 		print(self.name+"'s hand: ")
-		for i in self.hand:
-			print(i, end="")
+		for i, ele in enumerate(self.hand):
+			print(str(i+1), ". ", ele, sep="", end="")
 		print()
 		return ""
-		
 # game class
 class Game:
 	#init with list of players, main deck, current turn (0 - playerCount-1), and turn order (-1, 1)
@@ -163,8 +170,88 @@ class Game:
 		for i in self.players:
 			for j in range(7):
 				i.hand.append(self.main_deck.draw())
+	# updates turn based on turn order
+	def updateTurn(self):
+		self.current_turn += self.order
+		if self.current_turn >= len(self.players):
+			self.current_turn = 0
+		elif self.current_turn < 0:
+			self.current_turn = len(self.players)-1
+	def printTurn(self):
+		print("Top Card In Pile: ")
+		print(self.main_deck.top())
+		print()
+		print(self.players[self.current_turn].name, "\'s turn: ", sep="")
+		print(self.players[self.current_turn])
+	def hasValidCard(self):
+		for i in self.players[self.current_turn].hand:
+			if self.main_deck.isValidCard(i):
+				return True
+		return False
+	def nextTurn(self):
+		self.updateTurn()
+		nt = self.current_turn
+		self.order *= -1
+		self.updateTurn()
+		self.order *= -1
+		return nt
+	def changeColor(self):
+		new_color = int(input("New Color: "))
+		while not new_color in range(4):
+			new_color = int(input("New Color: "))
+		self.main_deck.pile[len(self.main_deck.pile)-1].color = new_color
+	def doAttribute(self):
+		top = self.main_deck.top()
+		nt = self.nextTurn()
+		if top.value == "+":
+			for i in range(2):
+				self.players[nt].hand.append(self.main_deck.draw())
+		elif top.value == "P":
+			for i in range(4):
+				self.players[nt].hand.append(self.main_deck.draw())
+				self.changeColor()
+		elif top.value == "S":
+			self.updateTurn()
+		elif top.value == "R":
+			self.order *= -1
+		elif top.value == "C":
+			self.changeColor()
 game = Game()
 game.createGame(int(input("numPlayers: ")))
-print(game)
+# print(game)
+winCondition = True
 while True:
-	break
+	game.printTurn()
+	ct = game.current_turn
+	card_index = int(input("Card To Play: "))-1
+	if game.hasValidCard():
+		while True:
+			if game.main_deck.isValidCard(game.players[ct].hand[card_index]):
+				game.main_deck.pile.append(game.players[ct].hand.pop(card_index))
+				if game.main_deck.top().hasAttribute():
+					game.doAttribute()
+				break
+			else:
+				card_index = int(input("Card To Play: "))-1
+	else:
+		while card_index != -1:
+			card_index = int(input("Card To Play: "))
+	if card_index == -1:
+		while True:
+			drawn = game.main_deck.draw()
+			if drawn is not None:
+				game.players[ct].hand.append(drawn)
+				if game.main_deck.isvalidCard(drawn):
+					to_play = int(input("Play Drawn Card? (1=Yes, 0=No): "))
+					if to_play == 1:
+						game.main_deck.pile.append(game.players[ct].hand.pop(len(game.players[ct].hand)-1))
+						if game.main_deck.top().hasAttribute():
+							game.doAttribute()
+						break
+					else:
+						break
+			else:
+				break
+	if len(game.players[ct].hand) == 0:
+		break
+	game.updateTurn()
