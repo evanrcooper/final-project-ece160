@@ -311,3 +311,4 @@ while True:
 for i in game.players:
 	if len(i.hand) == 0
 	print(i.name, "Wins!")
+	break
