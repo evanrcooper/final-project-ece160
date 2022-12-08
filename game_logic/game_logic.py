@@ -76,11 +76,16 @@ class MainDeck:
 				return self.deck.pop()
 			else:
 				return None
-	# refills deck with cards in the pile (leaves one card as top crad)
+	# refills deck with cards in the pile (leaves one card as top card)
 	def refillDeck(self):
 		temp = self.pile.pop()
 		for i in self.pile:
-			self.deck.append(i)
+			if i.value in "PC":
+				new_wild = i
+				new_wild.color == 4
+				self.deck.append(new_wild)
+			else:
+				self.deck.append(i)
 		self.pile = [temp]
 	# checks if input card is valid to play on top of top() card
 	def isValidCard(self, card):
@@ -178,17 +183,20 @@ class Game:
 			self.current_turn = 0
 		elif self.current_turn < 0:
 			self.current_turn = len(self.players)-1
+	# prints the info needed for each turn
 	def printTurn(self):
 		print("Top Card In Pile: ")
 		print(self.main_deck.top())
 		print()
 		print(self.players[self.current_turn].name, "\'s turn: ", sep="")
 		print(self.players[self.current_turn])
+	# compares all cards of player whose turn it is to top of pile to see if they have a valid card
 	def hasValidCard(self):
 		for i in self.players[self.current_turn].hand:
 			if self.main_deck.isValidCard(i):
 				return True
 		return False
+	# returns index of player whose turn it is next
 	def nextTurn(self):
 		self.updateTurn()
 		nt = self.current_turn
@@ -196,11 +204,13 @@ class Game:
 		self.updateTurn()
 		self.order *= -1
 		return nt
+	# changes color of card thats down
 	def changeColor(self):
 		new_color = int(input("New Color: "))
 		while not new_color in range(4):
 			new_color = int(input("New Color: "))
 		self.main_deck.pile[len(self.main_deck.pile)-1].color = new_color
+	# if card isnt a number card does the action required for that card
 	def doAttribute(self):
 		top = self.main_deck.top()
 		nt = self.nextTurn()
@@ -214,37 +224,55 @@ class Game:
 		elif top.value == "S":
 			self.updateTurn()
 		elif top.value == "R":
-			self.order *= -1
+			if len(self.players) == 2:
+				self.updateTurn()
+			else:
+				self.order *= -1
 		elif top.value == "C":
 			self.changeColor()
+			
+# creates game with inputted number of players
 game = Game()
-game.createGame(int(input("numPlayers: ")))
-# print(game)
+game.createGame(int(input("Number of Players: ")))
+
+# main loop
 while True:
-	card_played = False
-	uno = False
+	# temporary variables
+	card_played = False # stores whether the player played a card or not
+	uno = False # stores whether the player called uno or not
+	# prints info for current players turn
 	game.printTurn()
+	# gets index of current player
 	ct = game.current_turn
-	card_index = int(input("Card To Play: "))-1
+	# gets card to be played
+	card_index = int(input("Card To Play (0 To Draw): "))-1
+	# checks if player has a valid card
 	if game.hasValidCard():
+		# makes sure the card theyre playing is valid and doesnt let them draw
 		while True:
+			# plays the card they chose
 			if game.main_deck.isValidCard(game.players[ct].hand[card_index]):
 				game.main_deck.pile.append(game.players[ct].hand.pop(card_index))
 				card_played = True
+				# does the card's action/attribute
 				if game.main_deck.top().hasAttribute():
 					game.doAttribute()
 				break
 			else:
-				card_index = int(input("Card To Play: "))-1
+				card_index = int(input("Card To Play (0 To Draw): "))-1
+	# if player has no valid cards they must draw
 	else:
 		while card_index != -1:
-			card_index = int(input("Card To Play: "))
+			card_index = int(input("Card To Play (0 To Draw): "))-1
+	# draw until they get a valid card or run out of cards
 	if card_index == -1:
 		while True:
 			drawn = game.main_deck.draw()
+			# makes sure deck isnt empty
 			if drawn is not None:
 				game.players[ct].hand.append(drawn)
 				if game.main_deck.isvalidCard(drawn):
+					# checks if they want to play the drawn cards
 					to_play = int(input("Play Drawn Card? (1=Yes, 0=No): "))
 					if to_play == 1:
 						game.main_deck.pile.append(game.players[ct].hand.pop(len(game.players[ct].hand)-1))
@@ -256,22 +284,30 @@ while True:
 						break
 			else:
 				break
+	# asks if they want to call uno
 	if int(input("Call UNO? (1=Yes, 0=No): ")) == 1:
 		uno = True
+	# checks if they needed to call uno 
 	if card_played:
+		# checks if player won
 		if len(game.players[ct].hand) == 0:
 			break
 		elif len(game.players[ct].hand) == 1:
 			if not uno:
 				gane.players[ct].needs_uno = True
-			else:
-				for i in game.players:
-					if i.needs_uno:
-						i.needs_uno = False
-						for j in range(2):
-							card_drawn = game.main_deck.draw()
-							if card_drawn is None:
-								break
-							else:
-								i.hand.append(card_drawn)
+	# if uno was called distributes uno penalty to other players who didn't call it
+	if uno:
+		for i in game.players:
+			if i.needs_uno:
+				i.needs_uno = False
+				for j in range(2):
+					card_drawn = game.main_deck.draw()
+					if card_drawn is None:
+						break
+					else:
+						i.hand.append(card_drawn)
+	# updates current turn to next player
 	game.updateTurn()
+for i in game.players:
+	if len(i.hand) == 0
+	print(i.name, "Wins!")
