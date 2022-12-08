@@ -102,6 +102,7 @@ class Player:
 	def __init__(self, name):
 		self.name = name
 		self.hand = []
+		self.needs_uno = False
 	# player to string
 	def __str__(self):
 		print(self.name, "has", str(len(self.hand)), "cards.")
@@ -219,8 +220,9 @@ class Game:
 game = Game()
 game.createGame(int(input("numPlayers: ")))
 # print(game)
-winCondition = True
 while True:
+	card_played = False
+	uno = False
 	game.printTurn()
 	ct = game.current_turn
 	card_index = int(input("Card To Play: "))-1
@@ -228,6 +230,7 @@ while True:
 		while True:
 			if game.main_deck.isValidCard(game.players[ct].hand[card_index]):
 				game.main_deck.pile.append(game.players[ct].hand.pop(card_index))
+				card_played = True
 				if game.main_deck.top().hasAttribute():
 					game.doAttribute()
 				break
@@ -245,6 +248,7 @@ while True:
 					to_play = int(input("Play Drawn Card? (1=Yes, 0=No): "))
 					if to_play == 1:
 						game.main_deck.pile.append(game.players[ct].hand.pop(len(game.players[ct].hand)-1))
+						card_played = True
 						if game.main_deck.top().hasAttribute():
 							game.doAttribute()
 						break
@@ -252,6 +256,22 @@ while True:
 						break
 			else:
 				break
-	if len(game.players[ct].hand) == 0:
-		break
+	if int(input("Call UNO? (1=Yes, 0=No): ")) == 1:
+		uno = True
+	if card_played:
+		if len(game.players[ct].hand) == 0:
+			break
+		elif len(game.players[ct].hand) == 1:
+			if not uno:
+				gane.players[ct].needs_uno = True
+			else:
+				for i in game.players:
+					if i.needs_uno:
+						i.needs_uno = False
+						for j in range(2):
+							card_drawn = game.main_deck.draw()
+							if card_drawn is None:
+								break
+							else:
+								i.hand.append(card_drawn)
 	game.updateTurn()
