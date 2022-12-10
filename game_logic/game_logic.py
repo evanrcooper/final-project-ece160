@@ -320,6 +320,8 @@ while True:
 	game.printTurn()
 	# gets index of current player
 	ct = game.current_turn
+	# updates uno
+	game.players[ct].needs_uno = False
 	# gets card to be played
 	card_index = int(input("Card To Play (0 To Draw): "))-1
 	# checks if player has a valid card
