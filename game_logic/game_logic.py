@@ -387,9 +387,9 @@ while True:
 	# updates current turn to next player
 	game.updateTurn()
 for i in game.players:
-	if len(i.hand) == 0
-	print(i.name, "Wins!")
-	break
+	if len(i.hand) == 0:
+		print(i.name, "Wins!")
+		break
 
 """⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣶⣿⣿⣷⣶⣄⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
