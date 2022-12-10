@@ -1,0 +1,7 @@
+player 1:
+    player 1's hand (list of cards) (list of cards, each card has: int color, char/string value)
+    len(player 2's hand) (int)
+    top card in pile (int color, char/string value)
+    len(pile) (int)
+    len(deck) (int)
+    turn order (int = 1,-1)
