@@ -77,8 +77,11 @@
 # random library for shuffling deck
 import random
 
+from draw_card.main import *
 
-
+import os
+import threading
+import time
 # colors for printing (list)
 colors = ["Red", "Green", "Blue", "Yellow", "Wild"]
 
@@ -309,9 +312,37 @@ class Game:
 		elif top.value == "C":
 			self.changeColor()
 
-# creates game with inputted number of players
+######
+#card logic
+#threads together
+#gaming
+######
+
+class card_thread(threading.Thread):
+    def run(self):
+        self.kill = False
+        print("Started Card.")
+        while not self.kill:
+            card = draw("4", "blue")
+            print("FUCK YOU")
+        return
+
+#end card logic
+######
+
+#basic card example:
+#starts card in thread for 1s
+#then it DIES. KILL THE CHILD.
+cardz = []
+cardz.append(card_thread())
+cardz[0].start()
+time.sleep(2)
+cardz[0].kill = True
+
+print(f"Thread is {str(cardz[0].is_alive())}")
+
 game = Game()
-game.createGame(int(input("Number of Players: ")))
+game.createGame(2)
 
 # main loop
 while True:
@@ -387,8 +418,8 @@ while True:
 	# updates current turn to next player
 	game.updateTurn()
 for i in game.players:
-	if len(i.hand) == 0
-	print(i.name, "Wins!")
+	if len(i.hand) == 0:
+	    print(i.name, "Wins!")
 	break
 
 """⠀⠀⠀⠀⠀⠀⠀
