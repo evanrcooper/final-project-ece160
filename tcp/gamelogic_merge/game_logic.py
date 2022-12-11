@@ -323,23 +323,26 @@ class card_thread(threading.Thread):
         self.kill = False
         print("Started Card.")
         while not self.kill:
-            card = draw("4", "blue")
             print("FUCK YOU")
         return
+
+class cardWrangler:
+    def __init__(self, parent):
+        self.parent = parent
+        self.parent.geometry("300x450")
+        self.canvas = tk.Canvas(self.parent)
+        self.canvas.pack()
+
+    def newCard(self, classOfCard):
+        self.new = tk.Toplevel(self.parent)
+        self.app = classOfCard(self.new, "4", "blue")
 
 #end card logic
 ######
 
-#basic card example:
-#starts card in thread for 1s
-#then it DIES. KILL THE CHILD.
-cardz = []
-cardz.append(card_thread())
-cardz[0].start()
-time.sleep(2)
-cardz[0].kill = True
-
-print(f"Thread is {str(cardz[0].is_alive())}")
+root = tk.Tk()
+app = cardWrangler(root)
+root.mainloop()
 
 game = Game()
 game.createGame(2)
