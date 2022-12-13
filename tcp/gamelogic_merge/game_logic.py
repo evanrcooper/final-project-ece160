@@ -338,11 +338,7 @@ class cardWrangler:
         self.app = classOfCard(self.new, "4", "blue")
 
 #end card logic
-######
-
-root = tk.Tk()
-app = cardWrangler(root)
-root.mainloop()
+####
 
 game = Game()
 game.createGame(2)
