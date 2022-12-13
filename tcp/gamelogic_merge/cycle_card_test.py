@@ -21,14 +21,15 @@ def getNum():
 
 # function to open a new window
 # on a button click
-def nextCard(xxx):
+#nextCard(xxx)
+def nextCard():
 	master.canvas.delete('all')
 	#temporary variables for color and number on card
 	color = "white"
 	colors = ["red", "blue", "yellow", "green"]
 	card_number_center = "\u25AE"
-	card_number_corner = xxx
-	#arr[getNum()]
+	#card_number_corner = xxx
+	card_number_corner = arr[getNum()]
 	
 	# constants
 	h = 450 #window hieght
@@ -197,10 +198,10 @@ label.pack(pady = 10)
 
 # a button widget which will open a
 # new window on button click
-xxx = "LOL"
+#xxx = "LOL"
 btn = Button(master,
 			text ="Click To Cycle Next Card",
-			command = nextCard(xxx))
+			command = nextCard)
 btn.pack(pady = 10)
 
 # mainloop, runs infinitely
