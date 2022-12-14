@@ -283,7 +283,23 @@ void printHand(struct hand *hand) {
 
 // prints struct card
 void printCard(struct card *card) {
-	printf("Color = %s, Value = %c\n", colors[card->color], card->value);
+	char print_value[32];
+	if (card->value == 'P') {
+		print_value[32] = "";
+	} else if (card->value == 'C') {
+		print_value[32] = "Change Color";
+	} else if (card->value == 'P') {
+		print_value[32] = "Draw 4";
+	} else if (card->value == 'S') {
+		print_value[32] = "Skip";
+	} else if (card->value == 'R') {
+		print_value[32] = "Reverse";
+	} else if (card->value == '+') {
+		print_value[32] = "+2";
+	} else {
+		print_value[0] = card->value;
+	}
+	printf("Color = %s, Value = %s\n", colors[card->color], print_value);
 }
 
 // prints struct player
