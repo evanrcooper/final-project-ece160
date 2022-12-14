@@ -1,5 +1,11 @@
 # GUI DEMOS
 ### Creates new window and displays cards.
+##### Demos use tkinter in Python to create new windows and draw cards.
+
+The math for the elipses in the center of the cards uses the regular formula for an elipse rotated using the 2D rotation matrix and then shifted over to the center of the canvas.
+```
+Special thanks to Professor Smyth for teaching us the math for the elipses even after office hours ended.
+```
 
 **main.py**<br />
     > Main gui script (*written in Python*).<br />
