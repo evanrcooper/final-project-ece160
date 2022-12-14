@@ -283,24 +283,25 @@ void printHand(struct hand *hand) {
 
 // prints struct card
 void printCard(struct card *card) {
-	char *print_value;
-	if (card->value == 'P') {
-		char print_value[] = "";
-	} else if (card->value == 'C') {
-		char print_value[] = "Change Color";
-	} else if (card->value == 'P') {
-		char print_value[] = "Draw 4";
-	} else if (card->value == 'S') {
-		char print_value[] = "Skip";
-	} else if (card->value == 'R') {
-		char print_value[] = "Reverse";
-	} else if (card->value == '+') {
-		char print_value[] = "+2";
-	} else {
-		char print_value[1];
-		print_value[0] = card->value;
-	}
-	printf("Color = %s, Value = %s\n", colors[card->color], print_value);
+	// char *print_value;
+	// if (card->value == 'P') {
+		// char print_value[] = "";
+	// } else if (card->value == 'C') {
+		// char print_value[] = "Change Color";
+	// } else if (card->value == 'P') {
+		// char print_value[] = "Draw 4";
+	// } else if (card->value == 'S') {
+		// char print_value[] = "Skip";
+	// } else if (card->value == 'R') {
+		// char print_value[] = "Reverse";
+	// } else if (card->value == '+') {
+		// char print_value[] = "+2";
+	// } else {
+		// char print_value[1];
+		// print_value[0] = card->value;
+	// }
+	// printf("Color = %s, Value = %s\n", colors[card->color], print_value);
+	printf("Color = %s, Value = %s\n", colors[card->color], card->value);
 }
 
 // prints struct player
