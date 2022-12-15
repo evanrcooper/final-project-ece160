@@ -142,7 +142,7 @@ void swapCards(struct deck *deck, int index1, int index2);
 void shuffle(struct deck *deck);
 struct card draw(struct deck *deck);
 void deal(struct game *game);
-bool isValidCard(struct deck *deck, struct card *card); 
+bool isValidCard(struct deck *deck, struct card *card);
 void computeTurn(struct game *game);
 void outputGameState(struct game game);
 void takeTurn(struct game *game);
