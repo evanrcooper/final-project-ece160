@@ -301,7 +301,7 @@ void printCard(struct card *card) {
 		// print_value[0] = card->value;
 	// }
 	// printf("Color = %s, Value = %s\n", colors[card->color], print_value);
-	printf("Color = %s, Value = %s\n", colors[card->color], card->value);
+	printf("Color = %s, Value = %c\n", colors[card->color], card->value);
 }
 
 // prints struct player
@@ -439,9 +439,10 @@ void takeTurn(struct game *game) {
 				break;
 			}
 		} else {
-			handDraw(&(game->main_deck), &(game->players[game->current_turn].hand));
+			handDraw(&(game->main_deck), &(game->players[game->current_turn].hand));	
 			printCard(&(game->players[game->current_turn].hand.cards[game->players[game->current_turn].hand.hand_size-1]));
 		}
+
 		// draws until the player draws a valid card or the deck runs out of cards
 		if (isValidCard(&(game->main_deck), &(game->players[game->current_turn].hand.cards[game->players[game->current_turn].hand.hand_size-1]))) {
 			if (inputInt("Play Drawn Card (1/0 = Y/N): ") == 1) { // asks the player if they want to play their drawn card
